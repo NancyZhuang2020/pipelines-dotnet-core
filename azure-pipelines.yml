@@ -35,7 +35,7 @@ jobs:
   - task: DotNetCoreCLI@2
     inputs:
       command: 'restore'
-      projects: '**/*.crproj'
+      projects: '**/*.csproj'
       feedsToUse: 'select'
 
   - task: DotNetCoreCLI@2
