@@ -44,6 +44,11 @@ jobs:
       projects: '**/*.csproj'
       arguments: '--configuration $(buildConfiguration)' # Update this to match your needs
     
-  - script: exit 1
-    condition: eq(${{ parameters.succeed }}, false)
-    displayName: 'Force failure if succeed is false'
+  #- script: exit 1
+    #condition: eq(${{ parameters.succeed }}, false)
+    #displayName: 'Force failure if succeed is false'
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Pipeline.Workspace)'
+      artifact: 'TestPipeline'
+      publishLocation: 'pipeline'
