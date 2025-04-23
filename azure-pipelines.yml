@@ -52,17 +52,16 @@ jobs:
       targetPath: '$(Pipeline.Workspace)'
       artifact: 'TestPipeline'
       publishLocation: 'pipeline'
+
 - job: DeployJob
   steps:
-  - task: DownloadBuildArtifacts@0
+  - task: DownloadPipelineArtifact@2
     inputs:
-      buildType: 'current'
-      artifactName: 'drop'
-      itemPattern: '**/*.zip'
-      downloadPath: '$(System.ArtifactsDirectory)'
+      artifact: 'TestPipeline'
+      path: '$(System.ArtifactsDirectory)'
 
   - task: IISWebAppDeploymentOnMachineGroup@0
     inputs:
       WebSiteName: 'TestSite'
-      Package: '$(System.ArtifactsDirectory)/drop/*.zip'
+      Package: '$(System.ArtifactsDirectory)/*.zip'
 
