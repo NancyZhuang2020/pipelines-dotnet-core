@@ -65,9 +65,9 @@ jobs:
   - task: DownloadPipelineArtifact@2
     inputs:
       artifact: 'TestPipeline'
-      path: '$(System.ArtifactsDirectory)/$(Build.BuildId).zip'
+      path: '$(System.ArtifactsDirectory)/TestPipeline/$(Build.BuildId).zip'
 
   - task: IISWebAppDeploymentOnMachineGroup@0
     inputs:
       WebSiteName: 'TestSite'
-      Package: '$(System.ArtifactsDirectory)/$(Build.BuildId).zip'
+      Package: '$(System.ArtifactsDirectory)/TestPipeline/$(Build.BuildId).zip'
