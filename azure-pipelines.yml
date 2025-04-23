@@ -42,7 +42,7 @@ jobs:
     inputs:
       command: 'build'
       projects: '**/*.csproj'
-      arguments: '--configuration $(buildConfiguration)' # Update this to match your needs
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     
   #- script: exit 1
     #condition: eq(${{ parameters.succeed }}, false)
