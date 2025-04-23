@@ -71,13 +71,15 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        Import-Module WebAdministration
-        if (!(Test-Path IIS:\Sites\TestSite)) {
-            New-Website -Name "TestSite" -PhysicalPath "E:\IIS Sites\TestSite" -Port 8089 -Force
+        $parentPath = "E:\IIS Sites"
+        if (!(Test-Path $parentPath)) {
+            New-Item -ItemType Directory -Path $parentPath
         }
-    displayName: 'Create TestSite if not exists'
+    displayName: 'Create parent directory if not exists'
 
   - task: IISWebAppDeploymentOnMachineGroup@0
     inputs:
       WebSiteName: 'TestSite'
       Package: '$(System.ArtifactsDirectory)/TestPipeline/$(Build.BuildId).zip'
+      PhysicalPath: 'E:\IIS Sites\TestSite'
+
