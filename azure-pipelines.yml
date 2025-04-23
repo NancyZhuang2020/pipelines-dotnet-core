@@ -42,23 +42,25 @@ jobs:
     inputs:
       command: 'build'
       projects: '**/*.csproj'
-      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    
+      arguments: '--configuration ${{ parameters.buildConfiguration }} --output $(Build.ArtifactStagingDirectory)'
+
   #- script: exit 1
     #condition: eq(${{ parameters.succeed }}, false)
     #displayName: 'Force failure if succeed is false'
-  - task: PublishPipelineArtifact@1
-    inputs:
-      targetPath: '$(Pipeline.Workspace)'
-      artifact: 'TestPipeline'
-      publishLocation: 'pipeline'
+
   - task: ArchiveFiles@2
     inputs:
-      rootFolderOrFile: '$(Build.BinariesDirectory)'
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
       includeRootFolder: true
       archiveType: 'zip'
       archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
       replaceExistingArchive: true
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+      artifact: 'TestPipeline'
+      publishLocation: 'pipeline'
 
 - job: DeployJob
   steps:
@@ -70,5 +72,4 @@ jobs:
   - task: IISWebAppDeploymentOnMachineGroup@0
     inputs:
       WebSiteName: 'TestSite'
-      Package: '$(System.ArtifactsDirectory)/*.zip'
-
+      Package: '$(System.ArtifactsDirectory)/$(Build.BuildId).zip'
