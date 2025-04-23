@@ -67,6 +67,16 @@ jobs:
       artifact: 'TestPipeline'
       path: '$(System.ArtifactsDirectory)/TestPipeline/$(Build.BuildId).zip'
 
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        Import-Module WebAdministration
+        if (!(Test-Path IIS:\Sites\TestSite)) {
+            New-Website -Name "TestSite" -PhysicalPath "E:\IIS Sites\TestSite" -Port 8089 -Force
+        }
+    displayName: 'Create TestSite if not exists'
+
   - task: IISWebAppDeploymentOnMachineGroup@0
     inputs:
       WebSiteName: 'TestSite'
